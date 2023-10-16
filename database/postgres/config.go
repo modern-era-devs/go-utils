@@ -2,16 +2,17 @@ package postgres
 
 import (
 	"fmt"
+	//_ "gopkg.in/yaml.v2"
 )
 
 type PostgresConfig struct {
-	Host               string
-	Port               int
-	Name               string
-	Username           string
-	Password           string
-	MaxPoolSize        int
-	MaxIdleConnections int
+	Host               string `mapstructure:"HOST"`
+	Port               int    `mapstructure:"PORT"`
+	Name               string `mapstructure:"NAME"`
+	Username           string `mapstructure:"USERNAME"`
+	Password           string `mapstructure:"PASSWORD"`
+	MaxPoolSize        int    `mapstructure:"MAX_POOL_SIZE"`
+	MaxIdleConnections int    `mapstructure:"MAX_IDLE_CONNECTIONS"`
 }
 
 func GetPostgresConfig(port, poolSize, maxIdleConn int, user, password, host, dbName string) PostgresConfig {

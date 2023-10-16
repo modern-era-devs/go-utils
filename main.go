@@ -5,20 +5,11 @@ import (
 	"github.com/modern-era-devs/go-utils/config"
 	"github.com/modern-era-devs/go-utils/database/postgres"
 	"github.com/spf13/viper"
+	//_ "gopkg.in/yaml.v2"
 )
 
 type AppConfig struct {
-	Port                 int    `mapstructure:"PORT"`
-	DBName               string `mapstructure:"DB_NAME"`
-	DBPort               int    `mapstructure:"DB_PORT"`
-	DBUser               string `mapstructure:"DB_USER"`
-	DBPool               int    `mapstructure:"DB_POOL"`
-	DBMaxIdleConnections int    `mapstructure:"DB_MAX_IDLE_CONNECTIONS"`
-	DBHost               string `mapstructure:"DB_HOST"`
-}
-
-type PostgresConfig struct {
-	postgres.PostgresConfig
+	PostgresCfg postgres.PostgresConfig `mapstructure:"POSTGRES"`
 }
 
 func (cfg AppConfig) Init(filename string) error {
@@ -52,17 +43,17 @@ func main() {
 
 	fmt.Println(cfg)
 
-	postgresConfig := postgres.GetPostgresConfig(cfg.DBPort, cfg.DBPool, cfg.DBMaxIdleConnections, cfg.DBUser, "", cfg.DBHost, cfg.DBName)
+	//postgresConfig := postgres.GetPostgresConfig(cfg.PostgresCfg.Port, cfg.PostgresCfg.MaxPoolSize, cfg.PostgresCfg.MaxIdleConnections, cfg.PostgresCfg.Username, cfg.PostgresCfg.Password, cfg.PostgresCfg.Host, cfg.PostgresCfg.Name)
 
-	conn, err := postgres.NewPostgres(postgresConfig)
+	//conn, err := postgres.NewPostgres(postgresConfig)
 
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	err = conn.Ping()
-	if err != nil {
-		fmt.Println(err.Error())
-	} else {
-		fmt.Println("successfully create postgres connection")
-	}
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	//err = conn.Ping()
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//} else {
+	//	fmt.Println("successfully create postgres connection")
+	//}
 }

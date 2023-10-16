@@ -7,8 +7,10 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.2
 	github.com/pkg/errors v0.9.1
+	github.com/sirupsen/logrus v1.9.2
 	github.com/spf13/cast v1.5.1
 	github.com/spf13/viper v1.16.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
