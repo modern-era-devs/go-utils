@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/modern-era-devs/go-utils/authentication/jwt"
 	"github.com/modern-era-devs/go-utils/config"
 	"github.com/modern-era-devs/go-utils/database/postgres"
 	"github.com/modern-era-devs/go-utils/queue/kafka"
 	"github.com/spf13/viper"
 	"runtime"
-	//_ "gopkg.in/yaml.v2"
+	"time"
 )
 
 type AppConfig struct {
@@ -60,13 +61,32 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
+	token, err := jwt.CreateHS256SignedJWT("something", map[string]interface{}{"exp": time.Now().Add(1 * time.Hour), "adm": false, "id": "LasdfsdafS123asdf2sfadsfdasfasdf34"})
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(token)
+
+	isValid, err := jwt.IsValidHS256JWTSignature("somethawsdfing", token)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if isValid {
+		fmt.Println("valid signature")
+	} else {
+		fmt.Println("invalid signature")
+	}
+
 	//producer, err := kafka.SetupProducerConnection(cfg.KafkaProducer)
 	//
 	//if err != nil {
 	//	fmt.Println(err.Error())
 	//}
 	//
-	//for i := 0; i < 100; i++ {
+	//for i := 0; i < 100; i++ {`
 	//	err = kafka.Produce(producer, cfg.KafkaProducer.Topic, []byte(fmt.Sprintf("go-utils testing %d", i)))
 	//	if err != nil {
 	//		fmt.Println("error while producing message to kafka: ", err.Error())
