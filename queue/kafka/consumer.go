@@ -3,13 +3,13 @@ package kafka
 import (
 	"context"
 	"fmt"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	confluentKafka "github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/pkg/errors"
 	"os"
 )
 
-func SetupConsumerConnection(cfg ConsumerConfig) (*kafka.Consumer, error) {
-	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
+func SetupConsumerConnection(cfg ConsumerConfig) (*confluentKafka.Consumer, error) {
+	consumer, err := confluentKafka.NewConsumer(&confluentKafka.ConfigMap{
 		"bootstrap.servers": cfg.BootstrapServers,
 		"group.id":          cfg.ConsumerGroupID,
 		"auto.offset.reset": cfg.AutoOffsetReset,
@@ -26,13 +26,13 @@ func SetupConsumerConnection(cfg ConsumerConfig) (*kafka.Consumer, error) {
 	return consumer, err
 }
 
-func StartConsumption(_ context.Context, consumer *kafka.Consumer, pollTimeout int, exec func([]byte) error) error {
+func StartConsumption(_ context.Context, consumer *confluentKafka.Consumer, pollTimeout int, exec func([]byte) error) error {
 	run := true
 	var err error
 	for run == true {
 		ev := consumer.Poll(pollTimeout)
 		switch e := ev.(type) {
-		case *kafka.Message:
+		case *confluentKafka.Message:
 			// app specific processing here
 			go func() {
 				err := exec(e.Value)
@@ -40,7 +40,7 @@ func StartConsumption(_ context.Context, consumer *kafka.Consumer, pollTimeout i
 					fmt.Fprintf(os.Stdout, "%% Error while executing message: %v\n", e)
 				}
 			}()
-		case kafka.Error:
+		case confluentKafka.Error:
 			fmt.Fprintf(os.Stdout, "%% Error while reading message: %v\n", e)
 			err = e
 			run = false
