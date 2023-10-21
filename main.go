@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/modern-era-devs/go-utils/config"
 	"github.com/modern-era-devs/go-utils/database/postgres"
@@ -33,7 +32,7 @@ func (cfg AppConfig) Validate() error {
 }
 
 func main() {
-	ctx := context.Background()
+	//ctx := context.Background()
 	fmt.Println("initiating the project")
 	cfg := AppConfig{}
 	err := cfg.Init("application")
@@ -49,9 +48,17 @@ func main() {
 
 	fmt.Println(cfg)
 
-	//postgresConfig := postgres.GetPostgresConfig(cfg.PostgresCfg.Port, cfg.PostgresCfg.MaxPoolSize, cfg.PostgresCfg.MaxIdleConnections, cfg.PostgresCfg.Username, cfg.PostgresCfg.Password, cfg.PostgresCfg.Host, cfg.PostgresCfg.Name)
+	postgresConfig := postgres.GetPostgresConfig(cfg.PostgresCfg.Port, cfg.PostgresCfg.MaxPoolSize, cfg.PostgresCfg.MaxIdleConnections, cfg.PostgresCfg.Username, cfg.PostgresCfg.Password, cfg.PostgresCfg.Host, cfg.PostgresCfg.Name, cfg.PostgresCfg.SSLMode)
 
-	//conn, err := postgres.NewPostgres(postgresConfig)
+	conn, err := postgres.NewPostgres(postgresConfig)
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	if err = conn.Ping(); err != nil {
+		fmt.Println(err.Error())
+	}
 
 	//producer, err := kafka.SetupProducerConnection(cfg.KafkaProducer)
 	//
@@ -66,19 +73,19 @@ func main() {
 	//	}
 	//}
 
-	consumer, err := kafka.SetupConsumerConnection(cfg.KafkaConsumer)
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	fmt.Println("consumer: ", consumer)
-
-	err = kafka.StartConsumption(ctx, consumer, cfg.KafkaConsumer.PollTimeout, executeMessage)
-
-	if err != nil {
-		fmt.Println("error while consuming from connection: ", err.Error())
-	}
+	//consumer, err := kafka.SetupConsumerConnection(cfg.KafkaConsumer)
+	//
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	//
+	//fmt.Println("consumer: ", consumer)
+	//
+	//err = kafka.StartConsumption(ctx, consumer, cfg.KafkaConsumer.PollTimeout, executeMessage)
+	//
+	//if err != nil {
+	//	fmt.Println("error while consuming from connection: ", err.Error())
+	//}
 	//err = kafka.Produce(producer, []byte("something"))
 }
 

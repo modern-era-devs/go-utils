@@ -13,9 +13,10 @@ type PostgresConfig struct {
 	Password           string `mapstructure:"PASSWORD"`
 	MaxPoolSize        int    `mapstructure:"MAX_POOL_SIZE"`
 	MaxIdleConnections int    `mapstructure:"MAX_IDLE_CONNECTIONS"`
+	SSLMode            string `mapstructure:"SSL_MODE"`
 }
 
-func GetPostgresConfig(port, poolSize, maxIdleConn int, user, password, host, dbName string) PostgresConfig {
+func GetPostgresConfig(port, poolSize, maxIdleConn int, user, password, host, dbName, sslMode string) PostgresConfig {
 	return PostgresConfig{
 		Host:               host,
 		Port:               port,
@@ -24,6 +25,7 @@ func GetPostgresConfig(port, poolSize, maxIdleConn int, user, password, host, db
 		Password:           password,
 		MaxPoolSize:        poolSize,
 		MaxIdleConnections: maxIdleConn,
+		SSLMode:            sslMode,
 	}
 }
 
@@ -47,10 +49,14 @@ func (cfg PostgresConfig) GetMaxIdleConnections() int {
 	return cfg.MaxIdleConnections
 }
 
+func (cfg PostgresConfig) GetSSLMode() string {
+	return cfg.SSLMode
+}
+
 func (cfg PostgresConfig) GetConnectionString() string {
-	return fmt.Sprintf("dbname=%s user=%s password=%s host=%s sslmode=disable", cfg.Name, cfg.Username, cfg.Password, cfg.Host)
+	return fmt.Sprintf("dbname=%s user=%s password=%s host=%s sslmode=%s", cfg.Name, cfg.Username, cfg.Password, cfg.Host, cfg.SSLMode)
 }
 
 func (cfg PostgresConfig) GetConnectionURL() string {
-	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Name)
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Name, cfg.SSLMode)
 }
