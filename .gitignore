@@ -2,4 +2,4 @@
 *.env
 out
 
-main.go
+*main*

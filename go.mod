@@ -3,6 +3,7 @@ module github.com/modern-era-devs/go-utils
 go 1.19
 
 require (
+	github.com/confluentinc/confluent-kafka-go v1.9.2
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.2
@@ -10,7 +11,6 @@ require (
 	github.com/sirupsen/logrus v1.9.2
 	github.com/spf13/cast v1.5.1
 	github.com/spf13/viper v1.16.0
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
